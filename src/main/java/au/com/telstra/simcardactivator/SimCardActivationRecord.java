@@ -11,7 +11,7 @@ public class SimCardActivationRecord {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    @Column(name = "iccid", nullable = false, length = 20)
+    @Column(name = "iccid", nullable = false, length = 50)
     private String iccid;
     
     @Column(name = "customer_email", nullable = false, length = 255)
