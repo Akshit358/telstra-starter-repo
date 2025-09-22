@@ -7,15 +7,33 @@ Feature: SIM Card Activation Service
     Given the SIM card activation service is running
     And the actuator service is available
 
-  Scenario: Successfully activate a SIM card
-    Given I have a valid SIM card with ICCID "12345678901234567890"
+  Scenario: Successfully activate a SIM card with valid ICCID
+    Given I have a valid SIM card with ICCID "1255789453849037777"
     And the customer email is "customer@example.com"
     When I submit the activation request
     Then the activation should be successful
-    And the activation record should be saved
+    And the activation record should be saved with ID 1
     And I should receive a success response
+    When I query the database for SIM card with ID 1
+    Then I should receive the SIM card details
+    And the response should contain ICCID "1255789453849037777"
+    And the response should contain customer email "customer@example.com"
+    And the response should show active status as "true"
 
   Scenario: Fail to activate a SIM card with invalid ICCID
+    Given I have a valid SIM card with ICCID "8944500102198304826"
+    And the customer email is "customer@example.com"
+    When I submit the activation request
+    Then the activation should fail due to actuator service
+    And the activation record should be saved with ID 2
+    And I should receive a failure response
+    When I query the database for SIM card with ID 2
+    Then I should receive the SIM card details
+    And the response should contain ICCID "8944500102198304826"
+    And the response should contain customer email "customer@example.com"
+    And the response should show active status as "false"
+
+  Scenario: Fail to activate a SIM card with empty ICCID
     Given I have an invalid SIM card with ICCID ""
     And the customer email is "customer@example.com"
     When I submit the activation request
