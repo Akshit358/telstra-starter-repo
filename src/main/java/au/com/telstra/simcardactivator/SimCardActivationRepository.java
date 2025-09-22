@@ -19,14 +19,14 @@ public interface SimCardActivationRepository extends JpaRepository<SimCardActiva
     List<SimCardActivationRecord> findByCustomerEmail(String customerEmail);
     
     /**
-     * Find all successful activations
+     * Find all active SIM cards
      */
-    List<SimCardActivationRecord> findByActivationSuccessTrue();
+    List<SimCardActivationRecord> findByActiveTrue();
     
     /**
-     * Find all failed activations
+     * Find all inactive SIM cards
      */
-    List<SimCardActivationRecord> findByActivationSuccessFalse();
+    List<SimCardActivationRecord> findByActiveFalse();
     
     /**
      * Check if ICCID has been activated before

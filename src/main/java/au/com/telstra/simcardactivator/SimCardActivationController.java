@@ -49,6 +49,30 @@ public class SimCardActivationController {
         }
     }
     
+    @GetMapping("/simcard/{simCardId}")
+    public ResponseEntity<SimCardResponse> getSimCardById(@PathVariable Long simCardId) {
+        try {
+            logger.info("Retrieving SIM card record for ID: {}", simCardId);
+            Optional<SimCardActivationRecord> record = activationService.getActivationRecordById(simCardId);
+            
+            if (record.isPresent()) {
+                SimCardActivationRecord simRecord = record.get();
+                SimCardResponse response = new SimCardResponse(
+                    simRecord.getIccid(),
+                    simRecord.getCustomerEmail(),
+                    simRecord.isActive()
+                );
+                return ResponseEntity.ok(response);
+            } else {
+                logger.warn("No SIM card record found for ID: {}", simCardId);
+                return ResponseEntity.notFound().build();
+            }
+        } catch (Exception e) {
+            logger.error("Error retrieving SIM card record for ID {}: {}", simCardId, e.getMessage(), e);
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+    
     @GetMapping("/activations")
     public ResponseEntity<List<SimCardActivationRecord>> getAllActivations() {
         try {
@@ -91,26 +115,26 @@ public class SimCardActivationController {
         }
     }
     
-    @GetMapping("/activations/successful")
-    public ResponseEntity<List<SimCardActivationRecord>> getSuccessfulActivations() {
+    @GetMapping("/activations/active")
+    public ResponseEntity<List<SimCardActivationRecord>> getActiveSimCards() {
         try {
-            logger.info("Retrieving successful activations");
-            List<SimCardActivationRecord> records = activationService.getSuccessfulActivations();
+            logger.info("Retrieving active SIM cards");
+            List<SimCardActivationRecord> records = activationService.getActiveSimCards();
             return ResponseEntity.ok(records);
         } catch (Exception e) {
-            logger.error("Error retrieving successful activations: {}", e.getMessage(), e);
+            logger.error("Error retrieving active SIM cards: {}", e.getMessage(), e);
             return ResponseEntity.internalServerError().build();
         }
     }
     
-    @GetMapping("/activations/failed")
-    public ResponseEntity<List<SimCardActivationRecord>> getFailedActivations() {
+    @GetMapping("/activations/inactive")
+    public ResponseEntity<List<SimCardActivationRecord>> getInactiveSimCards() {
         try {
-            logger.info("Retrieving failed activations");
-            List<SimCardActivationRecord> records = activationService.getFailedActivations();
+            logger.info("Retrieving inactive SIM cards");
+            List<SimCardActivationRecord> records = activationService.getInactiveSimCards();
             return ResponseEntity.ok(records);
         } catch (Exception e) {
-            logger.error("Error retrieving failed activations: {}", e.getMessage(), e);
+            logger.error("Error retrieving inactive SIM cards: {}", e.getMessage(), e);
             return ResponseEntity.internalServerError().build();
         }
     }

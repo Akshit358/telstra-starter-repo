@@ -17,8 +17,8 @@ public class SimCardActivationRecord {
     @Column(name = "customer_email", nullable = false, length = 255)
     private String customerEmail;
     
-    @Column(name = "activation_success", nullable = false)
-    private boolean activationSuccess;
+    @Column(name = "active", nullable = false)
+    private boolean active;
     
     @Column(name = "activation_timestamp", nullable = false)
     private LocalDateTime activationTimestamp;
@@ -32,11 +32,11 @@ public class SimCardActivationRecord {
     }
     
     // Constructor with parameters
-    public SimCardActivationRecord(String iccid, String customerEmail, boolean activationSuccess) {
+    public SimCardActivationRecord(String iccid, String customerEmail, boolean active) {
         this();
         this.iccid = iccid;
         this.customerEmail = customerEmail;
-        this.activationSuccess = activationSuccess;
+        this.active = active;
     }
     
     // Getters and setters
@@ -64,12 +64,12 @@ public class SimCardActivationRecord {
         this.customerEmail = customerEmail;
     }
     
-    public boolean isActivationSuccess() {
-        return activationSuccess;
+    public boolean isActive() {
+        return active;
     }
     
-    public void setActivationSuccess(boolean activationSuccess) {
-        this.activationSuccess = activationSuccess;
+    public void setActive(boolean active) {
+        this.active = active;
     }
     
     public LocalDateTime getActivationTimestamp() {
@@ -94,7 +94,7 @@ public class SimCardActivationRecord {
                 "id=" + id +
                 ", iccid='" + iccid + '\'' +
                 ", customerEmail='" + customerEmail + '\'' +
-                ", activationSuccess=" + activationSuccess +
+                ", active=" + active +
                 ", activationTimestamp=" + activationTimestamp +
                 ", actuatorResponse='" + actuatorResponse + '\'' +
                 '}';

@@ -39,8 +39,8 @@ public class SimCardActivationService {
                 Optional<SimCardActivationRecord> existingRecord = repository.findByIccid(iccid);
                 if (existingRecord.isPresent()) {
                     SimCardActivationRecord record = existingRecord.get();
-                    logger.info("Previous activation result for ICCID {}: {}", iccid, record.isActivationSuccess());
-                    return record.isActivationSuccess();
+                    logger.info("Previous activation result for ICCID {}: {}", iccid, record.isActive());
+                    return record.isActive();
                 }
             }
             
@@ -99,18 +99,23 @@ public class SimCardActivationService {
         return repository.findByIccid(iccid);
     }
     
+    public Optional<SimCardActivationRecord> getActivationRecordById(Long id) {
+        logger.debug("Retrieving activation record for ID: {}", id);
+        return repository.findById(id);
+    }
+    
     public List<SimCardActivationRecord> getActivationRecordsByCustomerEmail(String customerEmail) {
         logger.debug("Retrieving activation records for customer: {}", customerEmail);
         return repository.findByCustomerEmail(customerEmail);
     }
     
-    public List<SimCardActivationRecord> getSuccessfulActivations() {
-        logger.debug("Retrieving all successful activations");
-        return repository.findByActivationSuccessTrue();
+    public List<SimCardActivationRecord> getActiveSimCards() {
+        logger.debug("Retrieving all active SIM cards");
+        return repository.findByActiveTrue();
     }
     
-    public List<SimCardActivationRecord> getFailedActivations() {
-        logger.debug("Retrieving all failed activations");
-        return repository.findByActivationSuccessFalse();
+    public List<SimCardActivationRecord> getInactiveSimCards() {
+        logger.debug("Retrieving all inactive SIM cards");
+        return repository.findByActiveFalse();
     }
 }
